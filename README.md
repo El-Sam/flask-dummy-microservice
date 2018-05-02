@@ -35,13 +35,14 @@ You need to meet the following requirements so that you can run this project:
 
 build the service by running: `./gradlew build`
 
-run the api in dev mode by running: `./gradlew run`
+run the api in dev mode by running: `./gradlew run`, then go then to `http://localhost:9090/persons` to see the response.
 
-run the api in prod mode by running: `./gradlew buildProd runProd`
+run the api in prod mode by running: `./gradlew buildProd runProd`, then go to `http://localhost:9091/persons`.
 
 run unit tests by running: `./gradlew testUnit`
 
 run unit tests with coverage by running: `./gradlew testCoverage`
+
 
 TODO
 -----
