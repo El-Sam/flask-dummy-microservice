@@ -1,0 +1,7 @@
+task cleanDocker (type: Exec) {
+    description "Stop and remove all containers of ${PROJECT}"
+    group 'Docker'
+
+    ignoreExitValue true
+    commandLine 'bash', '-c', "docker ps -a | awk '{print \$1 \" \" \$2 \" \" \$7}' | grep ${PROJECT} | awk '{print \$1}' | xargs docker stop | xargs docker rm"
+}

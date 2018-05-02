@@ -1,0 +1,14 @@
+task flake {
+    description "Run flake style guide"
+    group 'quality'
+
+    doLast {
+        exec {
+            executable 'docker-compose'
+            args '-p', PROJECT, 'run', '--rm', 'cli'
+            args 'flake8'
+            args '--exclude', '.git,__pycache__,.gradle, gradle, k8s, src/config'
+            args '--ignore', 'E501, E226, F401'
+        }
+    }
+}

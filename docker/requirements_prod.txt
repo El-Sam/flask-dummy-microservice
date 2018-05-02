@@ -1,0 +1,3 @@
+-r requirements.txt
+
+raven[flask] == 6.6.*

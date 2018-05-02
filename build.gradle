@@ -1,0 +1,10 @@
+// define extra properties
+ext{
+    SERVICE = "dummy"
+    PROJECT = "$SERVICE-svc"
+    NETWORK = "net-dev"
+}
+
+//configure the current project using an external build script
+apply from: './gradle/tasks/service.gradle'
+

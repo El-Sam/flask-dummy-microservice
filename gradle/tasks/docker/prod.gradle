@@ -1,0 +1,11 @@
+task buildProd {
+    group "Docker prod"
+
+    doLast{
+        exec {
+            executable 'docker-compose'
+            args '-p', PROJECT
+            args 'build', '--pull', '--force-rm', 'prod'
+        }
+    }
+}

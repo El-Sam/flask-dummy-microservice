@@ -1,0 +1,83 @@
+version: "3"
+
+services:
+  dev:
+    image: ${PROJECT}-web
+    build:
+      context: .
+      dockerfile: docker/DockerfileWeb
+      args:
+        USER_ID: "${USER_ID}"
+        GROUP_ID: "${GROUP_ID}"
+        PROJECT: "${PROJECT}"
+    environment:
+      FLASK_ENV: dev
+      PROJECT: ${PROJECT}
+      PYTHONUNBUFFERED: 1
+    env_file:
+      - docker/db-variables.env
+    links:
+      - "db"
+    volumes:
+      - "${PWD}:/var/www/${PROJECT}"
+      - "~/.ssh/:/home/user/.ssh/"
+    ports:
+      - 9090:8080
+    networks:
+      - net-dev
+
+  prod:
+    image: ${PROJECT}-prod
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        PROJECT: "${PROJECT}"
+    environment:
+      FLASK_ENV: prod
+      PROJECT: ${PROJECT}
+    env_file:
+      - docker/db-variables.env
+    links:
+      - "db"
+    ports:
+      - 9091:8000
+    networks:
+      - net-dev
+
+  cli:
+    image: ${PROJECT}-cli
+    build:
+      context: .
+      dockerfile: docker/DockerfileCli
+      args:
+        USER_ID: "${USER_ID}"
+        GROUP_ID: "${GROUP_ID}"
+        PROJECT: "${PROJECT}"
+    links:
+      - "db"
+    env_file:
+      - docker/db-variables.env
+    environment:
+      FLASK_ENV: dev
+    volumes:
+      - "${PWD}:/var/www/${PROJECT}"
+      - "~/.ssh/:/home/user/.ssh/"
+    networks:
+      - net-dev
+
+  db:
+    image: postgres
+    env_file:
+      - docker/db-variables.env
+    volumes:
+      - '${PWD}/docker/postgresql.conf:/var/src/postgresql/postgresql.conf'
+      - '${PWD}/docker/pg_hba.conf:/var/src/postgresql/pg_hba.conf'
+      - '/tmp/pgdata:/var/src/postgresql/data'
+    networks:
+      - net-dev
+
+networks:
+  net-dev:
+    external:
+      name: ${NETWORK}

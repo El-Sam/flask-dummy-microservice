@@ -1,0 +1,11 @@
+task runProd {
+    group "Docker prod"
+
+    doLast{
+        exec {
+            executable 'docker-compose'
+            args '-p', PROJECT
+            args 'up', 'prod'
+        }
+    }
+}

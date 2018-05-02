@@ -1,0 +1,37 @@
+FROM frolvlad/alpine-python3
+
+MAINTAINER Sam El <sam.elaabidi@gmail.com>
+
+RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories &&\
+    apk add --no-cache --upgrade \
+    apk-tools \
+    bash \
+    postgresql \
+    python3-dev \
+    gcc \
+    musl-dev \
+    postgresql-dev \
+    bash-completion \
+    shadow && \
+    pip3 install --no-cache-dir --upgrade \
+    pip && \
+    rm -r /root/.cache
+
+ARG USER_ID
+ARG GROUP_ID
+ARG PROJECT
+
+COPY ./docker/requirements.txt ./docker/requirements_cli.txt /tmp/
+
+COPY ./docker/postgresql.conf /var/lib/postgresql/postgresql.conf
+COPY ./docker/pg_hba.conf /var/lib/postgresql/pg_hba.conf
+
+RUN pip3 install -r /tmp/requirements_cli.txt &&\
+    groupadd -o -g ${GROUP_ID} user &&\
+    useradd -o -m -s /bin/bash -u ${USER_ID} -g ${GROUP_ID} user &&\
+    mkdir -p /var/www/${PROJECT} &&\
+    chown -R user:user /var/www/${PROJECT}
+
+USER user
+
+WORKDIR /var/www/${PROJECT}

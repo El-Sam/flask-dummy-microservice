@@ -1,0 +1,16 @@
+
+apply from: './gradle/tasks/docker/clean.gradle'
+apply from: './gradle/tasks/docker/dev.gradle'
+apply from: './gradle/tasks/docker/db.gradle'
+apply from: './gradle/tasks/docker/cli.gradle'
+apply from: './gradle/tasks/docker/prod.gradle'
+apply from: './gradle/tasks/test/unit.gradle'
+apply from: './gradle/tasks/test/contract.gradle'
+apply from: './gradle/tasks/quality/style.gradle'
+apply from: './gradle/tasks/run/dev.gradle'
+apply from: './gradle/tasks/run/prod.gradle'
+
+task build(dependsOn: [dockerDev]){
+    description 'build the project'
+    group 'build'
+}

@@ -1,0 +1,23 @@
+task dockerDb {
+    description "Prepare DB for ${PROJECT}"
+    group 'Docker db'
+
+    doLast {
+        exec {
+            executable 'docker-compose'
+            args '-p', PROJECT, 'up', '-d', 'db'
+        }
+    }
+}
+
+task dockerDbWaitForIt(dependsOn: ['dockerDb']) {
+    group 'Docker db'
+
+    doLast {
+        exec {
+            executable 'docker-compose'
+            args '-p', PROJECT, 'run', 'cli'
+            args 'python3', "./docker/wait_for_db.py"
+        }
+    }
+}

@@ -1,0 +1,23 @@
+task run {
+    group "Docker dev"
+
+    doLast{
+        exec {
+            executable 'docker-compose'
+            args '-p', PROJECT
+            args 'up', 'dev'
+        }
+    }
+}
+
+task runDetached {
+    group "Docker dev"
+
+    doLast{
+        exec {
+            executable 'docker-compose'
+            args '-p', PROJECT
+            args 'up', '-d', 'dev'
+        }
+    }
+}

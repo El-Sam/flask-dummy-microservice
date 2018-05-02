@@ -1,0 +1,169 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Flask dummy service",
+        "license": {
+            "name": "WTFPL"
+        },
+        "version": "0.1.0"
+    },
+    "host": "dev:8080",
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json",
+        "application/json;version=1"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/persons": {
+            "post": {
+                "summary": "Create a new person.",
+                "operationId": "createPerson",
+                "parameters": [
+                    {
+                        "name": "createPerson",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CreatePerson"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Person successfully created",
+                        "schema": {
+                            "$ref": "#/definitions/Person"
+                        }
+                    },
+                    "400": {
+                        "description": "Error.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected error.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "Get all persons.",
+                "operationId": "fetchPersons",
+                "responses": {
+                    "200": {
+                        "description": "Persons successfully fetched",
+                        "schema": {
+                            "$ref": "#/definitions/Persons"
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected error.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/persons/{id}": {
+          "get": {
+            "summary": "Get an person.",
+            "operationId": "getPerson",
+            "parameters": [
+              {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "description": "The person's id",
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Person successfully fetched",
+                "schema": {
+                  "$ref": "#/definitions/Person"
+                }
+              },
+              "404": {
+                "description": "Not found error.",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
+              },
+              "500": {
+                "description": "Unexpected Error.",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
+              }
+            }
+          }
+        }
+    },
+    "definitions": {
+        "Error": {
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "Person": {
+            "required": [
+                "id",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "birth_date": {
+                    "type": "string"
+                }
+            }
+        },
+        "CreatePerson": {
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "birth_date": {
+              "type": "string",
+              "format": "date",
+              "example": "01/01/1975"
+            }
+          }
+        },
+        "Persons": {
+          "required": [
+            "persons"
+          ],
+          "properties": {
+            "persons":{
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Person"
+              }
+            }
+          }
+        }
+    }
+}

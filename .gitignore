@@ -1,0 +1,8 @@
+.env
+.idea
+/.gradle
+/.idea/
+.coverage
+coverage.xml
+/htmlcov/*
+__pycache__

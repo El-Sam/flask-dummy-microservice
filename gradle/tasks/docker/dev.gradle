@@ -1,0 +1,66 @@
+task dockerDev(dependsOn: ['cleanDocker', 'createNetwork', 'getBuildInfo', 'dockerDbWaitForIt', 'installGitPreCommitHook'] ) {
+    group "Docker dev"
+
+    doLast{
+        exec {
+            executable 'docker-compose'
+            args '-p', PROJECT
+            args 'build', '--pull', '--force-rm', 'dev', 'cli'
+        }
+    }
+}
+
+task createNetwork(type: Exec) {
+    group "Docker dev"
+
+    ignoreExitValue true
+    commandLine "bash", '-c', "docker network create ${NETWORK}"
+}
+
+task getBuildInfo {
+
+    doLast{
+        def userId = new ByteArrayOutputStream()
+        def groupId = new ByteArrayOutputStream()
+        def pwd = new ByteArrayOutputStream()
+
+        exec {
+            executable 'id'
+            args '-u'
+            standardOutput userId
+        }
+        exec {
+            executable 'pwd'
+            standardOutput pwd
+        }
+        exec {
+            executable 'id'
+            args '-g'
+            standardOutput groupId
+        }
+
+        File envFile = file('.env')
+
+        def writer = new PrintWriter(envFile)
+
+        writer.print('USER_ID='+userId.toString())
+        writer.print('GROUP_ID='+groupId.toString())
+        writer.println('SERVICE='+SERVICE)
+        writer.println('PROJECT='+PROJECT)
+        writer.print('PROJECT_DIRECTORY='+pwd.toString())
+        writer.print('NETWORK='+NETWORK)
+
+        writer.close()
+    }
+}
+
+task installGitPreCommitHook() {
+    group 'Docker dev'
+
+    doLast {
+        exec {
+            executable 'cp'
+            args 'docker/git-pre-commit-hook', '.git/hooks/pre-commit'
+        }
+    }
+}

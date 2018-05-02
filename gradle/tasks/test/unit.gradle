@@ -1,0 +1,69 @@
+task testUnit {
+    description "Run unit tests"
+    group 'tests'
+
+    doLast {
+        exec {
+            executable 'docker-compose'
+            args '-p', PROJECT, 'run', '--rm', 'cli'
+            args 'nosetests'
+            args 'tests/service'
+        }
+    }
+}
+
+task testCoverage {
+    description "Run unit tests with coverage"
+    group 'tests'
+
+    doFirst {
+        delete 'htmlcov/*'
+        delete 'coverage.xml'
+        delete '.coverage'
+    }
+
+    doLast {
+        exec {
+            executable 'docker-compose'
+            args '-p', PROJECT, 'run', '--rm', 'cli'
+            args 'nosetests'
+            args '--with-cov'
+            args '--cov-report', 'html'
+            args '--cov-report', 'xml'
+            args '--cov', 'src'
+            args 'tests'
+        }
+
+        exec {
+            executable 'docker-compose'
+            args '-p', PROJECT, 'run', '--rm', 'cli'
+            args 'sed', '-i', "s|/var/www/|${project.rootDir}/|", 'coverage.xml'
+        }
+
+        println ""
+        println "Check coverage:"
+        println "file://${projectDir}/htmlcov/index.html"
+        println ""
+
+        checkCoverage('coverage.xml', 90)
+    }
+}
+
+def checkCoverage(path, minCoverage) {
+    def file = new File(path);
+    def xml = new XmlSlurper().parseText(file.text)
+
+    def coverage = 0
+
+    xml.'**'.findAll { node ->
+        if (node.name() == 'coverage') {
+            coverage = (node['@line-rate'].toFloat() * 100).toInteger()
+        }
+    }
+
+    if (coverage < minCoverage) {
+        throw new GradleException("Coverage is not ${minCoverage}%, but ${coverage}%")
+    }else{
+        println "Coverage is ${coverage}%"
+    }
+}

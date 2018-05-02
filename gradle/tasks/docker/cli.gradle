@@ -1,0 +1,12 @@
+task runCmd {
+    description "Run a random command line inside the cli container"
+    group "Docker cli"
+
+    doLast{
+        exec {
+            executable 'docker-compose'
+            args '-p', PROJECT, 'run', '--rm', 'cli'
+            args a.split(',')
+        }
+    }
+}

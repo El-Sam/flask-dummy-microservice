@@ -1,0 +1,13 @@
+task testContract {
+    description "Run contract tests"
+    group 'tests'
+
+    doLast {
+        exec {
+            executable 'docker-compose'
+            args '-p', PROJECT, 'run', '--rm', 'cli'
+            args 'nosetests'
+            args 'tests/contract'
+        }
+    }
+}
