@@ -23,9 +23,6 @@ ARG PROJECT
 
 COPY ./docker/requirements.txt ./docker/requirements_cli.txt /tmp/
 
-COPY ./docker/postgresql.conf /var/lib/postgresql/postgresql.conf
-COPY ./docker/pg_hba.conf /var/lib/postgresql/pg_hba.conf
-
 RUN pip3 install -r /tmp/requirements_cli.txt &&\
     groupadd -o -g ${GROUP_ID} user &&\
     useradd -o -m -s /bin/bash -u ${USER_ID} -g ${GROUP_ID} user &&\

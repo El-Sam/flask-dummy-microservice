@@ -12,6 +12,7 @@ services:
         PROJECT: "${PROJECT}"
     environment:
       FLASK_ENV: dev
+      FLASK_APP: src/app.py
       PROJECT: ${PROJECT}
       PYTHONUNBUFFERED: 1
     env_file:
@@ -35,6 +36,7 @@ services:
         PROJECT: "${PROJECT}"
     environment:
       FLASK_ENV: prod
+      FLASK_APP: src/app.py
       PROJECT: ${PROJECT}
     env_file:
       - docker/db-variables.env
@@ -59,6 +61,7 @@ services:
     env_file:
       - docker/db-variables.env
     environment:
+      FLASK_APP: src/app.py
       FLASK_ENV: dev
     volumes:
       - "${PWD}:/var/www/${PROJECT}"

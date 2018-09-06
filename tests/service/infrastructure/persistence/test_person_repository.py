@@ -1,12 +1,15 @@
 from unittest import TestCase
-from app import app
+
+from api import init_app
+from config import config
 from src.infrastructure.persistence.repositories import PersonRepository, Person
 
 
 class TestPersonRepository(TestCase):
 
     def setUp(self):
-        app.app_context().push()
+        self.app = init_app(config.get('test'))
+        self.app.app_context().push()
 
         self.repository = PersonRepository()
 

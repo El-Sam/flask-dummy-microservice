@@ -1,9 +1,9 @@
-from config import config_dev
 import os
-from api import init_app
+from .api import init_app
+from .config import config
 
 
-app = init_app(config=config_dev, debug=True)
+app = init_app(config=config.get(os.getenv('FLASK_ENV'), 'dev'))
 
 if __name__ == "__main__":
     if os.getenv('FLASK_ENV') == 'prod':
