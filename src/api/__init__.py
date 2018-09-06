@@ -32,12 +32,6 @@ def init_app(config):
     #     from raven.contrib.flask import Sentry
     #     Sentry(app)
 
-    @app.errorhandler(500)
-    def server_error(e):
-        return """
-        An internal error occurred: <pre>{}</pre>
-        """.format(e), 500
-
     @app.errorhandler(ClientException)
     def handle_client_errors(error):
         response = flask.jsonify(error.to_dict())

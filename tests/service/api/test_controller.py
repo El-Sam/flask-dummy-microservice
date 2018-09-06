@@ -18,12 +18,11 @@ class TestController(TestCase):
     def test_get_persons(self):
         person_id = uuid4()
 
-        person_mock = mock.Mock(spec_set=Person)
-        person_mock.configure_mock(**{
-            'id': person_id,
+        person_mock = {
+            'id': str(person_id),
             'name': 'jane',
             'birth_date': None
-        })
+        }
 
         self.service.configure_mock(**{
             'fetch_all_persons_service.return_value': ({'persons': [person_mock]}, 200)
@@ -41,18 +40,17 @@ class TestController(TestCase):
     def test_get_person(self):
         person_id = uuid4()
 
-        person_mock = mock.Mock(spec_set=Person)
-        person_mock.configure_mock(**{
-            'id': person_id,
+        person_mock = {
+            'id': str(person_id),
             'name': 'jane',
             'birth_date': None
-        })
+        }
 
         self.service.configure_mock(**{
             'get_person_service.return_value': (person_mock, 200)
         })
 
-        response = get_person(self.service, person_id)
+        response = get_person(self.service, str(person_id))
 
         self.assertIsInstance(cls=Response, obj=response)
         self.assertEqual(200, response.status_code)
@@ -61,12 +59,11 @@ class TestController(TestCase):
     def test_create_person(self):
         person_id = uuid4()
 
-        person_mock = mock.Mock(spec_set=Person)
-        person_mock.configure_mock(**{
-            'id': person_id,
+        person_mock = {
+            'id': str(person_id),
             'name': 'jane',
             'birth_date': None
-        })
+        }
 
         self.service.configure_mock(**{
             'create_person_service.return_value': (person_mock, 201)

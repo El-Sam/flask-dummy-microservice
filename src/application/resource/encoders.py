@@ -1,13 +1,9 @@
 from flask.json import JSONEncoder
-from .resources import Person
+from .resources import Resource
 
 
 class FlaskCustomJSONEncoder(JSONEncoder):
     def default(self, obj) -> dict:
-        if isinstance(obj, Person):
-            return {
-                'id': obj.id,
-                'name': obj.name,
-                'birth_date': obj.birth_date,
-            }
+        if isinstance(obj, Resource):
+            return obj.to_json()
         return super().default(obj)

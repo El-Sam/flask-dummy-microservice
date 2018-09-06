@@ -21,7 +21,7 @@ Features
 - flask and python 3 to build the API
 - Dependency Injection of classes' instances for easy unit testing.
 - Some DDD principles
-- unit testing and ~90% coverage.
+- unit testing and ~89% coverage.
 - swagger documentation, manually written (still gotta figure out a good way to auto generate them).
 - WSGI server setup to run the app in production env.
 
@@ -47,7 +47,7 @@ run unit tests with coverage by running: `./gradlew testCoverage`
 TODO
 -----
 
-- setup CD/CI pipeline using Jenkins or TravisCI.
+- setup CD/CI pipeline using TravisCI.
 - automate swagger generation
 - add contract test to test whether the API respects the contract (swagger)
 

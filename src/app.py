@@ -1,6 +1,6 @@
 import os
-from .api import init_app
-from .config import config
+from api import init_app
+from config import config
 
 
 app = init_app(config=config.get(os.getenv('FLASK_ENV'), 'dev'))
